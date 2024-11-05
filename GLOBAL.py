@@ -5,9 +5,19 @@ class Detector:
 
 
     def detectar_mutante(self):
-        if self.detector_horizontal():
-            return print("Se detecto una mutacion ")
-        else: print("No se detectaron mutaciones horizontales")
+        mutacion_horizontal = self.detector_horizontal()
+        mutacion_vertical = self.detector_vertical()
+
+        if mutacion_horizontal and mutacion_vertical:
+            print("Hemos encontrado mutaciones tanto horizontales y verticales!")
+        elif mutacion_horizontal:
+            print("Se detecto una mutacion Horizontal! \nNo se encontraron mutaciones verticales")
+        elif mutacion_vertical:
+            print("Se detecto una mutacion vertical! \nNo se encontraron mutacion Horizontales")
+        else:
+            print("No se encontro ningun tipo de Mutacion")
+        
+
 
     def detector_horizontal(self):
         for fila in self.ADN:
@@ -21,7 +31,20 @@ class Detector:
                 else:
                     contador_consecutivo = 1 #En caso de que no sean iguales las letras se reinicia contador a 0
         return False
+    
+    def detector_vertical(self):
+        num_columnas = len(self.ADN[0])
+        for columnas in range(num_columnas):
+            contador_consecutivo = 1
+            for fila in range(1, len(self.ADN)):
+                if self.ADN[fila][columnas] == self.ADN[fila-1][columnas]:
+                    contador_consecutivo += 1
+                    if contador_consecutivo == self.detector:
+                        print(f"Se Encontraron {self.detector} {self.ADN[fila][columnas]} consecutivas en la columna: {columnas+1}")
+                        return True
+                else:
+                    contador_consecutivo = 0
+        return False
 
-
-ADN = Detector(["TTTTCA", "GATTCA", "CAACAT", "GAGCTA", "ATTGCG", "CTGTTC"], 4)
+ADN = Detector(["AGATCA", "GATTCA", "CAATAT", "GAGTTA", "ATTGCG", "CTGTTC"], 4)
 ADN.detectar_mutante()
